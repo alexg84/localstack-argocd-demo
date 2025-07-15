@@ -15,6 +15,7 @@ metadata:
 spec:
   forProvider:
     bucket: {{ .Values.s3.bucketName }}
+    region: {{ .Values.localstack.region }}
     policy: |
       {
         "Version": "2012-10-17",

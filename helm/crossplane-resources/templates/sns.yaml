@@ -5,6 +5,7 @@ metadata:
 spec:
   forProvider:
     name: {{ .Values.sns.topicName }}
+    region: {{ .Values.localstack.region }}
   providerConfigRef:
     name: localstack-config
 ---
@@ -16,6 +17,7 @@ spec:
   forProvider:
     protocol: sqs
     endpoint: arn:aws:sqs:{{ .Values.localstack.region }}:000000000000:{{ .Values.sqs.queueName }}
+    region: {{ .Values.localstack.region }}
     topicArnRef:
       name: {{ .Values.sns.topicName }}
   providerConfigRef:

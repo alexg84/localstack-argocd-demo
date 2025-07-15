@@ -15,6 +15,7 @@ spec:
       namespace: default
     allocatedStorage: {{ .Values.rds.allocatedStorage }}
     storageType: gp2
+    region: {{ .Values.localstack.region }}
     publiclyAccessible: true
     skipFinalSnapshot: true
     deleteAutomatedBackups: true

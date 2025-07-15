@@ -5,6 +5,7 @@ metadata:
 spec:
   forProvider:
     name: {{ .Values.sqs.queueName }}
+    region: {{ .Values.localstack.region }}
     messageRetentionSeconds: 1209600  # 14 days
     visibilityTimeoutSeconds: 300
     receiveWaitTimeSeconds: 0
@@ -20,6 +21,7 @@ spec:
   forProvider:
     queueUrlRef:
       name: {{ .Values.sqs.queueName }}
+    region: {{ .Values.localstack.region }}
     policy: |
       {
         "Version": "2012-10-17",
