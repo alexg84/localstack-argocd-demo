@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.rds.dbName }}
 spec:
   forProvider:
-    dbInstanceClass: {{ .Values.rds.instanceClass }}
+    instanceClass: {{ .Values.rds.instanceClass }}
     dbName: {{ .Values.rds.dbName }}
     engine: {{ .Values.rds.engine }}
     engineVersion: {{ .Values.rds.engineVersion | quote }}
