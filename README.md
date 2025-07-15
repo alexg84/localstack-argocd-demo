@@ -52,6 +52,7 @@ This repository contains a complete setup for deploying a Hello World Flask appl
 │   ├── s3.yaml           # S3 bucket
 │   ├── sns.yaml          # SNS topic
 │   ├── sqs.yaml          # SQS queue
+
 │   └── rds.yaml          # RDS database
 ├── helm/                  # Helm chart
 │   └── hello-world-app/
