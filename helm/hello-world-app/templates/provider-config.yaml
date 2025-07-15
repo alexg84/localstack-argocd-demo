@@ -7,26 +7,22 @@ spec:
     url:
       type: Static
       static: "{{ .Values.localstack.endpoint }}"
-    hostnameImmutable: true
   credentials:
     source: Secret
     secretRef:
       namespace: crossplane-system
-      name: aws-secret-updated
+      name: aws-secret-simple
       key: creds
-  region: {{ .Values.localstack.region }}
-  skip_credentials_validation: true
-  skip_requesting_account_id: true
-  skip_metadata_api_check: true
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: aws-secret-updated
+  name: aws-secret-simple
   namespace: crossplane-system
 type: Opaque
-data:
-  # Base64 encoded dummy AWS credentials for LocalStack with region
-  # LocalStack doesn't use real AWS credentials - these are just dummy values
-  # Format: [default]\naws_access_key_id = test\naws_secret_access_key = test\nregion = us-east-1
-  creds: W2RlZmF1bHRdCmF3c19hY2Nlc3Nfa2V5X2lkID0gdGVzdAphd3Nfc2VjcmV0X2FjY2Vzc19rZXkgPSB0ZXN0CnJlZ2lvbiA9IHVzLWVhc3QtMQ==
+stringData:
+  creds: |
+    [default]
+    aws_access_key_id = test
+    aws_secret_access_key = test
+    region = us-east-1
