@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/alexg84/hello-world-app
-  pullPolicy: Always
-  tag: "latest"
+  repository: python
+  pullPolicy: IfNotPresent
+  tag: "3.11-slim"
 
 service:
   type: ClusterIP

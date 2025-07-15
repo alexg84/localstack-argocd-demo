@@ -18,6 +18,46 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - |
+              pip install Flask==2.3.3
+              cat > /tmp/main.py << 'EOF'
+              from flask import Flask
+              import os
+              
+              app = Flask(__name__)
+              
+              @app.route('/')
+              def hello_world():
+                  return '''
+                  <html>
+                      <head>
+                          <title>Hello World App</title>
+                          <style>
+                              body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+                              h1 { color: #333; }
+                              p { color: #666; }
+                          </style>
+                      </head>
+                      <body>
+                          <h1>Hello World!</h1>
+                          <p>This is a Flask application running in Kubernetes</p>
+                          <p>Deployed with ArgoCD via GitOps</p>
+                      </body>
+                  </html>
+                  '''
+              
+              @app.route('/health')
+              def health_check():
+                  return {'status': 'healthy', 'message': 'Application is running'}
+              
+              if __name__ == '__main__':
+                  port = int(os.environ.get('PORT', 5000))
+                  app.run(host='0.0.0.0', port=port, debug=True)
+              EOF
+              python /tmp/main.py
           ports:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
