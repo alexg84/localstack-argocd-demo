@@ -1,6 +1,6 @@
 localstack:
   enabled: true
-  endpoint: "https://localhost.localstack.cloud:4566"
+  endpoint: "https://192.168.49.1:4566"
   region: us-east-1
 
 s3:
