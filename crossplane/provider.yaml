@@ -34,7 +34,7 @@ spec:
   endpoint:
     url:
       type: Static
-      static: "https://192.168.49.1:4566"
+      static: "http://192.168.49.1:4566"
     hostnameImmutable: true
   credentials:
     source: Secret
