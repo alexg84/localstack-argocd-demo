@@ -1,0 +1,32 @@
+apiVersion: aws.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: localstack-config
+spec:
+  endpoint:
+    url:
+      type: Static
+      static: "{{ .Values.localstack.endpoint }}"
+  skip_credentials_validation: true
+  skip_requesting_account_id: true
+  skip_metadata_api_check: true
+  s3_use_path_style: true
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: aws-secret-simple
+      key: creds
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-secret-simple
+  namespace: crossplane-system
+type: Opaque
+stringData:
+  creds: |
+    [default]
+    aws_access_key_id = test
+    aws_secret_access_key = test
+    region = us-east-1
