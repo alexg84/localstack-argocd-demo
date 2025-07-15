@@ -28,4 +28,26 @@ tolerations: []
 affinity: {}
 
 nameOverride: ""
-fullnameOverride: ""
+
+# LocalStack configuration
+localstack:
+  enabled: true
+  endpoint: "http://host.minikube.internal:4566"
+  region: us-east-1
+
+# AWS resources configuration
+s3:
+  bucketName: "hello-world-bucket"
+  
+sns:
+  topicName: "hello-world-notifications"
+  
+sqs:
+  queueName: "hello-world-queue"
+  
+rds:
+  dbName: "helloworlddb"
+  instanceClass: "db.t3.micro"
+  engine: "postgres"
+  engineVersion: "13.7"
+  allocatedStorage: 20
