@@ -11,7 +11,7 @@ data:
   application.instanceLabelKey: argocd.argoproj.io/instance
   # Git repositories
   repositories: |
-    - url: https://github.com/argoproj/argocd-example-apps.git
+    - url: https://github.com/alexg84/localstack-argocd-demo.git
   # Server configuration
   server.insecure: "true"
   # Enable gRPC-Web

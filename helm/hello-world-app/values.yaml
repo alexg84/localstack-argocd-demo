@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: hello-world-app
-  pullPolicy: Never
+  repository: ghcr.io/alexg84/hello-world-app
+  pullPolicy: Always
   tag: "latest"
 
 service:
