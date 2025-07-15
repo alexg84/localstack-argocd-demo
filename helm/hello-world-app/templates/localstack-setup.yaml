@@ -1,0 +1,99 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: localstack-setup
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: aws-cli
+        image: amazon/aws-cli:2.15.30
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          value: "test"
+        - name: AWS_SECRET_ACCESS_KEY
+          value: "test"
+        - name: AWS_DEFAULT_REGION
+          value: "{{ .Values.localstack.region }}"
+        - name: AWS_ENDPOINT_URL
+          value: "{{ .Values.localstack.endpoint }}"
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -e
+          echo "Setting up LocalStack resources..."
+          
+          # Create S3 bucket
+          aws s3 mb s3://{{ .Values.s3.bucketName }} --endpoint-url=$AWS_ENDPOINT_URL || echo "Bucket may already exist"
+          
+          # Create SNS topic
+          TOPIC_ARN=$(aws sns create-topic --name {{ .Values.sns.topicName }} --endpoint-url=$AWS_ENDPOINT_URL --output text --query 'TopicArn')
+          echo "Created SNS topic: $TOPIC_ARN"
+          
+          # Create SQS queue
+          QUEUE_URL=$(aws sqs create-queue --queue-name {{ .Values.sqs.queueName }} --endpoint-url=$AWS_ENDPOINT_URL --output text --query 'QueueUrl')
+          echo "Created SQS queue: $QUEUE_URL"
+          
+          # Get queue ARN for subscription
+          QUEUE_ARN=$(aws sqs get-queue-attributes --queue-url $QUEUE_URL --attribute-names QueueArn --endpoint-url=$AWS_ENDPOINT_URL --output text --query 'Attributes.QueueArn')
+          echo "Queue ARN: $QUEUE_ARN"
+          
+          # Subscribe SQS queue to SNS topic
+          aws sns subscribe --topic-arn $TOPIC_ARN --protocol sqs --notification-endpoint $QUEUE_ARN --endpoint-url=$AWS_ENDPOINT_URL
+          echo "Subscribed SQS queue to SNS topic"
+          
+          # Set queue policy to allow SNS to send messages
+          cat > /tmp/queue-policy.json << EOF
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": "sns.amazonaws.com"
+                },
+                "Action": "sqs:SendMessage",
+                "Resource": "$QUEUE_ARN",
+                "Condition": {
+                  "ArnEquals": {
+                    "aws:SourceArn": "$TOPIC_ARN"
+                  }
+                }
+              }
+            ]
+          }
+          EOF
+          
+          aws sqs set-queue-attributes --queue-url $QUEUE_URL --attributes file:///tmp/queue-policy.json --endpoint-url=$AWS_ENDPOINT_URL
+          echo "Set queue policy for SNS access"
+          
+          # Set S3 bucket policy for public read
+          cat > /tmp/bucket-policy.json << EOF
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Sid": "PublicReadGetObject",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::{{ .Values.s3.bucketName }}/*"
+              }
+            ]
+          }
+          EOF
+          
+          aws s3api put-bucket-policy --bucket {{ .Values.s3.bucketName }} --policy file:///tmp/bucket-policy.json --endpoint-url=$AWS_ENDPOINT_URL
+          echo "Set S3 bucket policy"
+          
+          echo "LocalStack setup completed successfully!"
+          echo "Resources created:"
+          echo "- S3 bucket: {{ .Values.s3.bucketName }}"
+          echo "- SNS topic: {{ .Values.sns.topicName }}"
+          echo "- SQS queue: {{ .Values.sqs.queueName }}"
+          echo "- SNS->SQS subscription configured"
