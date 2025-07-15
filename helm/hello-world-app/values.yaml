@@ -44,10 +44,3 @@ sns:
   
 sqs:
   queueName: "hello-world-queue"
-  
-rds:
-  dbName: "helloworlddb"
-  instanceClass: "db.t3.micro"
-  engine: "postgres"
-  engineVersion: "13.7"
-  allocatedStorage: 20
