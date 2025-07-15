@@ -1,16 +1,15 @@
-apiVersion: rds.aws.crossplane.io/v1alpha1
-kind: DBInstance
+apiVersion: rds.aws.upbound.io/v1beta1
+kind: Instance
 metadata:
   name: {{ .Values.rds.dbName }}
 spec:
   forProvider:
-    region: {{ .Values.localstack.region }}
     dbInstanceClass: {{ .Values.rds.instanceClass }}
     dbName: {{ .Values.rds.dbName }}
     engine: {{ .Values.rds.engine }}
     engineVersion: {{ .Values.rds.engineVersion | quote }}
-    masterUsername: admin
-    masterUserPasswordSecretRef:
+    username: admin
+    passwordSecretRef:
       name: db-password
       key: password
       namespace: default

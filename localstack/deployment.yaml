@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: localstack
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: localstack
+  template:
+    metadata:
+      labels:
+        app: localstack
+    spec:
+      containers:
+      - name: localstack
+        image: localstack/localstack-pro:3.0
+        ports:
+        - containerPort: 4566
+          name: localstack
+        env:
+        - name: LOCALSTACK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: localstack-secret
+              key: api-key
+        - name: DEBUG
+          value: "1"
+        - name: SERVICES
+          value: "s3,sns,sqs,rds"
+        - name: DATA_DIR
+          value: "/var/lib/localstack"
+        volumeMounts:
+        - name: localstack-data
+          mountPath: /var/lib/localstack
+      volumes:
+      - name: localstack-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: localstack
+  namespace: default
+spec:
+  selector:
+    app: localstack
+  ports:
+  - port: 4566
+    targetPort: 4566
+    name: localstack
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: localstack-secret
+  namespace: default
+type: Opaque
+data:
+  # LocalStack API key (base64 encoded)
+  api-key: bHMtcWlLVTQ5MTYtQlVnSS05NzU5LUNpdEktSmlYT0Zvd08yM2Y2

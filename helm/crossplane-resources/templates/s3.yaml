@@ -1,22 +1,20 @@
-apiVersion: s3.aws.crossplane.io/v1beta1
+apiVersion: s3.aws.upbound.io/v1beta1
 kind: Bucket
 metadata:
   name: {{ .Values.s3.bucketName }}
 spec:
   forProvider:
     region: {{ .Values.localstack.region }}
-    locationConstraint: {{ .Values.localstack.region }}
   providerConfigRef:
     name: localstack-config
 ---
-apiVersion: s3.aws.crossplane.io/v1beta1
+apiVersion: s3.aws.upbound.io/v1beta1
 kind: BucketPolicy
 metadata:
   name: {{ .Values.s3.bucketName }}-policy
 spec:
   forProvider:
     bucket: {{ .Values.s3.bucketName }}
-    region: {{ .Values.localstack.region }}
     policy: |
       {
         "Version": "2012-10-17",

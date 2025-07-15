@@ -1,21 +1,19 @@
-apiVersion: sns.aws.crossplane.io/v1beta1
+apiVersion: sns.aws.upbound.io/v1beta1
 kind: Topic
 metadata:
   name: {{ .Values.sns.topicName }}
 spec:
   forProvider:
-    region: {{ .Values.localstack.region }}
     name: {{ .Values.sns.topicName }}
   providerConfigRef:
     name: localstack-config
 ---
-apiVersion: sns.aws.crossplane.io/v1beta1
-kind: Subscription
+apiVersion: sns.aws.upbound.io/v1beta1
+kind: TopicSubscription
 metadata:
   name: {{ .Values.sns.topicName }}-subscription
 spec:
   forProvider:
-    region: {{ .Values.localstack.region }}
     protocol: sqs
     endpoint: arn:aws:sqs:{{ .Values.localstack.region }}:000000000000:{{ .Values.sqs.queueName }}
     topicArnRef:
