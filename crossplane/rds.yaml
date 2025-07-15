@@ -1,0 +1,32 @@
+apiVersion: rds.aws.crossplane.io/v1alpha1
+kind: DBInstance
+metadata:
+  name: hello-world-db
+spec:
+  forProvider:
+    region: us-east-1
+    dbInstanceClass: db.t3.micro
+    dbName: helloworlddb
+    engine: postgres
+    engineVersion: "13.7"
+    masterUsername: admin
+    masterUserPasswordSecretRef:
+      name: db-password
+      key: password
+      namespace: default
+    allocatedStorage: 20
+    storageType: gp2
+    publiclyAccessible: true
+    skipFinalSnapshot: true
+    deleteAutomatedBackups: true
+  providerConfigRef:
+    name: localstack-config
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-password
+  namespace: default
+type: Opaque
+data:
+  password: cGFzc3dvcmQxMjM=  # base64 encoded "password123"

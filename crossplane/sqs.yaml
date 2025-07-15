@@ -1,0 +1,42 @@
+apiVersion: sqs.aws.crossplane.io/v1beta1
+kind: Queue
+metadata:
+  name: hello-world-queue
+spec:
+  forProvider:
+    region: us-east-1
+    name: hello-world-queue
+    visibilityTimeoutSeconds: 30
+    messageRetentionPeriod: 1209600
+  providerConfigRef:
+    name: localstack-config
+---
+apiVersion: sqs.aws.crossplane.io/v1beta1
+kind: QueuePolicy
+metadata:
+  name: hello-world-queue-policy
+spec:
+  forProvider:
+    region: us-east-1
+    queueUrlRef:
+      name: hello-world-queue
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowSNSPublish",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "sqs:SendMessage",
+            "Resource": "arn:aws:sqs:us-east-1:000000000000:hello-world-queue",
+            "Condition": {
+              "ArnEquals": {
+                "aws:SourceArn": "arn:aws:sns:us-east-1:000000000000:hello-world-notifications"
+              }
+            }
+          }
+        ]
+      }
+  providerConfigRef:
+    name: localstack-config

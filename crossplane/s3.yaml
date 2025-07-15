@@ -1,0 +1,34 @@
+apiVersion: s3.aws.crossplane.io/v1beta1
+kind: Bucket
+metadata:
+  name: hello-world-bucket
+spec:
+  forProvider:
+    region: us-east-1
+    locationConstraint: us-east-1
+  providerConfigRef:
+    name: localstack-config
+---
+apiVersion: s3.aws.crossplane.io/v1beta1
+kind: BucketPolicy
+metadata:
+  name: hello-world-bucket-policy
+spec:
+  forProvider:
+    bucket: hello-world-bucket
+    region: us-east-1
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::hello-world-bucket/*"
+          }
+        ]
+      }
+  providerConfigRef:
+    name: localstack-config

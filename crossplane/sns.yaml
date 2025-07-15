@@ -1,0 +1,24 @@
+apiVersion: sns.aws.crossplane.io/v1beta1
+kind: Topic
+metadata:
+  name: hello-world-topic
+spec:
+  forProvider:
+    region: us-east-1
+    name: hello-world-notifications
+  providerConfigRef:
+    name: localstack-config
+---
+apiVersion: sns.aws.crossplane.io/v1beta1
+kind: Subscription
+metadata:
+  name: hello-world-subscription
+spec:
+  forProvider:
+    region: us-east-1
+    protocol: sqs
+    endpoint: arn:aws:sqs:us-east-1:000000000000:hello-world-queue
+    topicArnRef:
+      name: hello-world-topic
+  providerConfigRef:
+    name: localstack-config
