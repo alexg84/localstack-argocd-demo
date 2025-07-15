@@ -14,6 +14,7 @@ spec:
       namespace: crossplane-system
       name: aws-secret
       key: creds
+  region: {{ .Values.localstack.region }}
 ---
 apiVersion: v1
 kind: Secret
