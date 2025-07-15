@@ -6,12 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: .
+    repoURL: file:///Users/alex/repos/localstack
     targetRevision: HEAD
     path: helm/hello-world-app
     helm:
       valueFiles:
         - values.yaml
+      parameters:
+        - name: image.pullPolicy
+          value: Never
   destination:
     server: https://kubernetes.default.svc
     namespace: default
