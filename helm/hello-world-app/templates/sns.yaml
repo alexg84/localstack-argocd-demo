@@ -6,6 +6,7 @@ spec:
   forProvider:
     name: {{ .Values.sns.topicName }}
     region: {{ .Values.localstack.region }}
+    tags: {}
   initProvider: {}
   managementPolicies:
   - '*'
