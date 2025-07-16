@@ -1,0 +1,39 @@
+replicaCount: 1
+
+image:
+  repository: localstack/localstack-pro
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 4566
+  targetPort: 4566
+
+# LocalStack configuration
+localstack:
+  apiKey: "ls-qiKU4916-BUgI-9759-CitI-JiXOFowO23f6"
+  debug: "1"
+  services: "s3,sns,sqs"
+  dataDir: "/var/lib/localstack"
+  persistence: "1"
+  lambdaExecutor: "local"
+  hostname: "localstack"
+  hostnameExternal: "localstack.default.svc.cluster.local"
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+nameOverride: ""
+fullnameOverride: ""

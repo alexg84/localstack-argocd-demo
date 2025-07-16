@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "localstack.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "localstack.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "localstack.name" . }}
+    spec:
+      containers:
+      - name: localstack
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+          name: localstack
+        env:
+        - name: LOCALSTACK_API_KEY
+          value: "{{ .Values.localstack.apiKey }}"
+        - name: DEBUG
+          value: "{{ .Values.localstack.debug }}"
+        - name: SERVICES
+          value: "{{ .Values.localstack.services }}"
+        - name: DATA_DIR
+          value: "{{ .Values.localstack.dataDir }}"
+        - name: PERSISTENCE
+          value: "{{ .Values.localstack.persistence }}"
+        - name: LAMBDA_EXECUTOR
+          value: "{{ .Values.localstack.lambdaExecutor }}"
+        - name: LOCALSTACK_HOSTNAME
+          value: "{{ .Values.localstack.hostname }}"
+        - name: HOSTNAME_EXTERNAL
+          value: "{{ .Values.localstack.hostnameExternal }}"
+        readinessProbe:
+          httpGet:
+            path: /_localstack/health
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /_localstack/health
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        volumeMounts:
+        - name: localstack-data
+          mountPath: {{ .Values.localstack.dataDir }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: localstack-data
+        emptyDir: {}

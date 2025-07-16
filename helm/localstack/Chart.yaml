@@ -1,0 +1,6 @@
+apiVersion: v2
+name: localstack
+description: LocalStack Pro deployment for AWS services emulation
+type: application
+version: 0.1.0
+appVersion: "latest"
