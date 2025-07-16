@@ -1,7 +1,7 @@
 apiVersion: rds.aws.crossplane.io/v1alpha1
 kind: DBInstance
 metadata:
-  name: hello-world-db
+  name: idp-demo-db
 spec:
   forProvider:
     region: us-east-1

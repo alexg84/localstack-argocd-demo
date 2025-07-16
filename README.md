@@ -119,10 +119,10 @@ Visit: http://localhost:8080
 
 The following AWS resources are provisioned:
 
-- **S3 Bucket**: `hello-world-bucket`
-- **SNS Topic**: `hello-world-notifications`
-- **SQS Queue**: `hello-world-queue`
-- **RDS Database**: `hello-world-db` (PostgreSQL)
+- **S3 Bucket**: `idp-demo-bucket`
+- **SNS Topic**: `idp-demo-notifications`
+- **SQS Queue**: `idp-demo-queue`
+- **RDS Database**: `idp-demo-db` (PostgreSQL)
 
 ## Troubleshooting
 

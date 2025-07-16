@@ -4,13 +4,13 @@ localstack:
   region: us-east-1
 
 s3:
-  bucketName: "hello-world-bucket"
+  bucketName: "idp-demo-bucket"
   
 sns:
-  topicName: "hello-world-notifications"
+  topicName: "idp-demo-notifications"
   
 sqs:
-  queueName: "hello-world-queue"
+  queueName: "idp-demo-queue"
   
 rds:
   dbName: "helloworlddb"

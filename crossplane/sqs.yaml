@@ -1,11 +1,11 @@
 apiVersion: sqs.aws.crossplane.io/v1beta1
 kind: Queue
 metadata:
-  name: hello-world-queue
+  name: idp-demo-queue
 spec:
   forProvider:
     region: us-east-1
-    name: hello-world-queue
+    name: idp-demo-queue
     visibilityTimeoutSeconds: 30
     messageRetentionPeriod: 1209600
   providerConfigRef:
@@ -14,12 +14,12 @@ spec:
 apiVersion: sqs.aws.crossplane.io/v1beta1
 kind: QueuePolicy
 metadata:
-  name: hello-world-queue-policy
+  name: idp-demo-queue-policy
 spec:
   forProvider:
     region: us-east-1
     queueUrlRef:
-      name: hello-world-queue
+      name: idp-demo-queue
     policy: |
       {
         "Version": "2012-10-17",
@@ -29,10 +29,10 @@ spec:
             "Effect": "Allow",
             "Principal": "*",
             "Action": "sqs:SendMessage",
-            "Resource": "arn:aws:sqs:us-east-1:000000000000:hello-world-queue",
+            "Resource": "arn:aws:sqs:us-east-1:000000000000:idp-demo-queue",
             "Condition": {
               "ArnEquals": {
-                "aws:SourceArn": "arn:aws:sns:us-east-1:000000000000:hello-world-notifications"
+                "aws:SourceArn": "arn:aws:sns:us-east-1:000000000000:idp-demo-notifications"
               }
             }
           }
