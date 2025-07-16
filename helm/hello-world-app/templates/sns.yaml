@@ -8,6 +8,6 @@ spec:
     region: {{ .Values.localstack.region }}
   initProvider: {}
   managementPolicies:
-  - "*"
+  - '*'
   providerConfigRef:
     name: localstack-config
