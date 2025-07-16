@@ -28,6 +28,9 @@ spec:
   dependsOn:
     - name: {{ .Values.sns.topicName }}
     - name: {{ .Values.sqs.queueName }}
+  dependsOn:
+    - name: {{ .Values.sns.topicName }}
+    - name: {{ .Values.sqs.queueName }}
 ---
 apiVersion: sqs.aws.upbound.io/v1beta1
 kind: QueuePolicy
