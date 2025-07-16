@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "hello-world-app.fullname" . }}
+  name: {{ include "idp-demo.fullname" . }}
   labels:
-    {{- include "hello-world-app.labels" . | nindent 4 }}
+    {{- include "idp-demo.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "hello-world-app.selectorLabels" . | nindent 6 }}
+      {{- include "idp-demo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "hello-world-app.selectorLabels" . | nindent 8 }}
+        {{- include "idp-demo.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}

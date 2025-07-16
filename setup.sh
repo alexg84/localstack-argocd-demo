@@ -37,7 +37,7 @@ kubectl wait --for=condition=available --timeout=300s deployment/crossplane -n c
 # Step 3: Build and load Docker image for the hello world app
 echo "🐳 Building Docker image for hello world app..."
 eval $(minikube docker-env)
-docker build -t hello-world-app:latest ./app/
+docker build -t idp-demo:latest ./app/
 
 # Step 4: Apply ArgoCD configurations
 echo "⚙️ Applying ArgoCD configurations..."
@@ -79,7 +79,7 @@ echo "Username: admin"
 echo "Password: ${ARGOCD_PASSWORD}"
 echo ""
 echo "To access the hello world app:"
-echo "kubectl port-forward svc/hello-world-app 8080:80"
+echo "kubectl port-forward svc/idp-demo 8080:80"
 echo "Then visit: http://localhost:8080"
 echo ""
 echo "To start LocalStack (run in another terminal):"

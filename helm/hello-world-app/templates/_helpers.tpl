@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "hello-world-app.name" -}}
+{{- define "idp-demo.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "hello-world-app.fullname" -}}
+{{- define "idp-demo.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,16 +24,16 @@ Create a default fully qualified app name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "hello-world-app.chart" -}}
+{{- define "idp-demo.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "hello-world-app.labels" -}}
-helm.sh/chart: {{ include "hello-world-app.chart" . }}
-{{ include "hello-world-app.selectorLabels" . }}
+{{- define "idp-demo.labels" -}}
+helm.sh/chart: {{ include "idp-demo.chart" . }}
+{{ include "idp-demo.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -43,7 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "hello-world-app.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "hello-world-app.name" . }}
+{{- define "idp-demo.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "idp-demo.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

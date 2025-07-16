@@ -1,3 +1,5 @@
+name: idp-demo
+
 replicaCount: 1
 
 image:

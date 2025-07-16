@@ -55,7 +55,7 @@ This repository contains a complete setup for deploying a Hello World Flask appl
 
 │   └── rds.yaml          # RDS database
 ├── helm/                  # Helm chart
-│   └── hello-world-app/
+│   └── idp-demo/
 │       ├── Chart.yaml
 │       ├── values.yaml
 │       └── templates/
@@ -87,7 +87,7 @@ helm install crossplane crossplane-stable/crossplane --namespace crossplane-syst
 ```bash
 # Build Docker image
 eval $(minikube docker-env)
-docker build -t hello-world-app:latest ./app/
+docker build -t idp-demo:latest ./app/
 
 # Apply configurations
 kubectl apply -f argocd/
@@ -110,7 +110,7 @@ minikube service argocd-server -n argocd
 
 ### Hello World App
 ```bash
-kubectl port-forward svc/hello-world-app 8080:80
+kubectl port-forward svc/idp-demo 8080:80
 ```
 
 Visit: http://localhost:8080
@@ -138,7 +138,7 @@ kubectl get managed
 
 ### View Application Logs
 ```bash
-kubectl logs -l app.kubernetes.io/name=hello-world-app
+kubectl logs -l app.kubernetes.io/name=idp-demo
 ```
 
 ### Reset Everything
