@@ -32,7 +32,7 @@ nameOverride: ""
 # LocalStack configuration
 localstack:
   enabled: true
-  endpoint: "http://localstack.default.svc.cluster.local:4566"
+  endpoint: "http://host.minikube.internal:4566"
   region: us-east-1
 
 # AWS resources configuration

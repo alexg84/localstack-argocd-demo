@@ -15,27 +15,27 @@ spec:
     spec:
       containers:
       - name: localstack
-        image: localstack/localstack:3.0
+        image: localstack/localstack-pro:latest
         ports:
         - containerPort: 4566
           name: localstack
         env:
+        - name: LOCALSTACK_API_KEY
+          value: "ls-qiKU4916-BUgI-9759-CitI-JiXOFowO23f6"
         - name: DEBUG
           value: "1"
         - name: SERVICES
           value: "s3,sns,sqs"
         - name: DATA_DIR
           value: "/var/lib/localstack"
-        - name: SKIP_INFRA_DOWNLOADS
+        - name: PERSISTENCE
           value: "1"
-        - name: DISABLE_CORS_CHECKS
-          value: "1"
-        - name: SKIP_SSL_CERT_DOWNLOAD
-          value: "1"
-        - name: FORCE_NONINTERACTIVE
-          value: "1"
-        - name: EAGER_SERVICE_LOADING
-          value: "1"
+        - name: LAMBDA_EXECUTOR
+          value: "local"
+        - name: LOCALSTACK_HOSTNAME
+          value: "localstack"
+        - name: HOSTNAME_EXTERNAL
+          value: "localstack.default.svc.cluster.local"
         readinessProbe:
           httpGet:
             path: /_localstack/health
