@@ -25,9 +25,6 @@ spec:
     region: {{ .Values.localstack.region }}
   providerConfigRef:
     name: localstack-config
-  dependsOn:
-    - name: {{ .Values.sns.topicName }}
-    - name: {{ .Values.sqs.queueName }}
 ---
 apiVersion: sqs.aws.upbound.io/v1beta1
 kind: QueuePolicy
@@ -58,6 +55,3 @@ spec:
     region: {{ .Values.localstack.region }}
   providerConfigRef:
     name: localstack-config
-  dependsOn:
-    - name: {{ .Values.sqs.queueName }}
-    - name: {{ .Values.sns.topicName }}
