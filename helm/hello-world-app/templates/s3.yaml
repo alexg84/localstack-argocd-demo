@@ -1,0 +1,35 @@
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: {{ .Values.s3.bucketName }}
+spec:
+  forProvider:
+    region: {{ .Values.localstack.region }}
+  providerConfigRef:
+    name: localstack-config
+---
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketPolicy
+metadata:
+  name: {{ .Values.s3.bucketName }}-policy
+spec:
+  forProvider:
+    bucket: {{ .Values.s3.bucketName }}
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::{{ .Values.s3.bucketName }}/*"
+          }
+        ]
+      }
+    region: {{ .Values.localstack.region }}
+  providerConfigRef:
+    name: localstack-config
+  dependsOn:
+    - name: {{ .Values.s3.bucketName }}

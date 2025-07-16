@@ -1,0 +1,63 @@
+apiVersion: sqs.aws.upbound.io/v1beta1
+kind: Queue
+metadata:
+  name: {{ .Values.sqs.queueName }}
+spec:
+  forProvider:
+    name: {{ .Values.sqs.queueName }}
+    delaySeconds: 0
+    messageRetentionSeconds: 1209600
+    receiveWaitTimeSeconds: 0
+    visibilityTimeoutSeconds: 300
+    region: {{ .Values.localstack.region }}
+  providerConfigRef:
+    name: localstack-config
+---
+apiVersion: sns.aws.upbound.io/v1beta1
+kind: TopicSubscription
+metadata:
+  name: {{ .Values.sns.topicName }}-subscription
+spec:
+  forProvider:
+    topicArn: {{ printf "arn:aws:sns:%s:000000000000:%s" .Values.localstack.region .Values.sns.topicName }}
+    protocol: sqs
+    endpoint: {{ printf "arn:aws:sqs:%s:000000000000:%s" .Values.localstack.region .Values.sqs.queueName }}
+    region: {{ .Values.localstack.region }}
+  providerConfigRef:
+    name: localstack-config
+  dependsOn:
+    - name: {{ .Values.sns.topicName }}
+    - name: {{ .Values.sqs.queueName }}
+---
+apiVersion: sqs.aws.upbound.io/v1beta1
+kind: QueuePolicy
+metadata:
+  name: {{ .Values.sqs.queueName }}-policy
+spec:
+  forProvider:
+    queueUrl: {{ printf "http://localstack.default.svc.cluster.local:4566/000000000000/%s" .Values.sqs.queueName }}
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "sns.amazonaws.com"
+            },
+            "Action": "sqs:SendMessage",
+            "Resource": "arn:aws:sqs:{{ .Values.localstack.region }}:000000000000:{{ .Values.sqs.queueName }}",
+            "Condition": {
+              "ArnEquals": {
+                "aws:SourceArn": "arn:aws:sns:{{ .Values.localstack.region }}:000000000000:{{ .Values.sns.topicName }}"
+              }
+            }
+          }
+        ]
+      }
+    region: {{ .Values.localstack.region }}
+  providerConfigRef:
+    name: localstack-config
+  dependsOn:
+    - name: {{ .Values.sqs.queueName }}
+    - name: {{ .Values.sns.topicName }}

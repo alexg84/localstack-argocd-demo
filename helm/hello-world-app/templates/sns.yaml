@@ -1,0 +1,10 @@
+apiVersion: sns.aws.upbound.io/v1beta1
+kind: Topic
+metadata:
+  name: {{ .Values.sns.topicName }}
+spec:
+  forProvider:
+    name: {{ .Values.sns.topicName }}
+    region: {{ .Values.localstack.region }}
+  providerConfigRef:
+    name: localstack-config
