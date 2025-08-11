@@ -12,7 +12,7 @@ service:
 
 # LocalStack configuration
 localstack:
-  apiKey: "ls-qiKU4916-BUgI-9759-CitI-JiXOFowO23f6"
+  apiKey: ""
   debug: "1"
   services: "s3,sns,sqs"
   dataDir: "/var/lib/localstack"
